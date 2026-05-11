@@ -52,6 +52,12 @@ function Hero() {
         <h1>{profile.name}</h1>
         <p className="role">{profile.role}</p>
         <p className="intro">{profile.intro}</p>
+        <div className="hero-specialties" aria-label="Core specialties">
+          <span>RAG platforms</span>
+          <span>AI SaaS</span>
+          <span>Workflow automation</span>
+          <span>Full-stack systems</span>
+        </div>
         <div className="hero-actions">
           <LinkButton href={profile.github}><Github size={18} /> GitHub</LinkButton>
           <LinkButton href={assetPath(profile.cv)} variant="secondary"><Download size={18} /> Download CV</LinkButton>
@@ -64,14 +70,25 @@ function Hero() {
         </div>
       </div>
       <div className="hero-visual">
-        <div className="portrait-wrap">
-          <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
-          <div className="portrait-card">
-            <BrainCircuit size={22} />
-            <div>
-              <strong>AI systems with product sense</strong>
-              <span>RAG, automation, SaaS, dashboards, and mobile apps.</span>
+        <div className="command-card">
+          <div className="command-topline">
+            <span>Selected systems</span>
+            <strong>08 projects</strong>
+          </div>
+          <div className="portrait-wrap">
+            <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
+            <div className="portrait-card">
+              <BrainCircuit size={22} />
+              <div>
+                <strong>AI systems with product sense</strong>
+                <span>RAG, automation, SaaS, dashboards, and mobile apps.</span>
+              </div>
             </div>
+          </div>
+          <div className="command-metrics">
+            <div><strong>FastAPI</strong><span>Backend APIs</span></div>
+            <div><strong>React</strong><span>Product UI</span></div>
+            <div><strong>LLMs</strong><span>AI workflows</span></div>
           </div>
         </div>
         <div className="hero-proof">
@@ -107,11 +124,11 @@ function Stats() {
   );
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, compact = false }) {
   const isFeatured = index < 2;
 
   return (
-    <article className={`project-card ${isFeatured ? "featured" : ""}`}>
+    <article className={`project-card ${isFeatured && !compact ? "featured" : ""} ${compact ? "compact" : ""}`}>
       <div className="project-image">
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} loading="lazy" />
         <span>{String(index + 1).padStart(2, "0")} / {project.type}</span>
@@ -150,7 +167,68 @@ function ProjectCard({ project, index }) {
   );
 }
 
+function WorkIndex() {
+  return (
+    <aside className="work-index" aria-label="Work organization">
+      <div className="work-index-card">
+        <span className="index-label">Portfolio map</span>
+        <h3>Organized by proof, not just thumbnails.</h3>
+        <a href="#live-work"><Globe2 size={17} /> Live private-source products</a>
+        <a href="#open-source"><Github size={17} /> Open-source engineering repos</a>
+        <a href="#verification"><CheckCircle2 size={17} /> Build and screenshot validation</a>
+      </div>
+      <div className="work-index-card dark">
+        <span className="index-label">Best signal</span>
+        <strong>Private commercial platforms + public source projects</strong>
+        <p>Commercial work is screenshot-only. Public projects show source, docs, and validation evidence.</p>
+      </div>
+    </aside>
+  );
+}
+
+function FeaturedCaseStudy({ project, index }) {
+  return (
+    <article className="case-study">
+      <div className="case-visual">
+        <img src={assetPath(project.image)} alt={`${project.title} screenshot`} />
+      </div>
+      <div className="case-content">
+        <div className="case-meta">
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <span>{project.type}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p>{project.summary}</p>
+        <div className="case-actions">
+          {project.live ? <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={17} /> Live site</a> : null}
+          {project.source ? <a href={project.source} target="_blank" rel="noreferrer"><Github size={17} /> Source</a> : null}
+        </div>
+        <div className="case-columns">
+          <div>
+            <h4>Role and build</h4>
+            <ul>
+              {project.highlights.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h4>Evidence</h4>
+            <ul className="checks">
+              {project.tests.map((item) => <li key={item}><CheckCircle2 size={15} /> {item}</li>)}
+            </ul>
+          </div>
+        </div>
+        <div className="tag-row">
+          {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function Projects() {
+  const liveProjects = projects.filter((project) => project.live);
+  const sourceProjects = projects.filter((project) => project.source);
+
   return (
     <section id="projects">
       <SectionHeading eyebrow="Selected work" title="AI products, SaaS platforms, and automation systems">
@@ -161,8 +239,36 @@ function Projects() {
         <div><Github size={21} /><span>Public code</span><strong>6 polished GitHub repos</strong></div>
         <div><CheckCircle2 size={21} /><span>Evidence</span><strong>Build checks + screenshots</strong></div>
       </div>
-      <div className="projects-grid">
-        {projects.map((project, index) => <ProjectCard project={project} index={index} key={project.title} />)}
+      <div className="work-layout">
+        <WorkIndex />
+        <div className="work-content">
+          <div id="live-work" className="work-cluster">
+            <div className="cluster-heading">
+              <span>01</span>
+              <div>
+                <h3>Live private-source platforms</h3>
+                <p>Source code stays private. The portfolio shows screenshots, product outcomes, and validation boundaries.</p>
+              </div>
+            </div>
+            {liveProjects.map((project, index) => (
+              <FeaturedCaseStudy project={project} index={index} key={project.title} />
+            ))}
+          </div>
+          <div id="open-source" className="work-cluster">
+            <div className="cluster-heading">
+              <span>02</span>
+              <div>
+                <h3>Open-source engineering portfolio</h3>
+                <p>Public GitHub repos with cleaned READMEs, source links, screenshots, and build evidence.</p>
+              </div>
+            </div>
+            <div className="projects-grid">
+              {sourceProjects.map((project, index) => (
+                <ProjectCard project={project} index={index + liveProjects.length} compact key={project.title} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
