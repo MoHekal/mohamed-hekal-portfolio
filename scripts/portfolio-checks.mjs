@@ -6,7 +6,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const required = [
   "public/assets/mohamed-hekal.jpg",
   "public/assets/Mohamed_Hekal_CV.pdf",
-  ...projects.map((project) => `public${project.image}`)
+  ...projects.map((project) => `public/${project.image.replace(/^\/+/, "")}`)
 ];
 
 const missing = required.filter((item) => !existsSync(path.join(root, item)));

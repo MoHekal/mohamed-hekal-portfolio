@@ -15,6 +15,11 @@ import {
 import { education, experience, profile, projects, skills, stats, verification } from "./data";
 import "./styles.css";
 
+function assetPath(value) {
+  if (!value || value.startsWith("http") || value.startsWith("mailto:")) return value;
+  return `${import.meta.env.BASE_URL}${value.replace(/^\/+/, "")}`;
+}
+
 function LinkButton({ href, children, variant = "primary" }) {
   return (
     <a className={`btn ${variant}`} href={href} target={href?.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
@@ -43,7 +48,7 @@ function Hero() {
         <p className="intro">{profile.intro}</p>
         <div className="hero-actions">
           <LinkButton href={profile.github}><Github size={18} /> GitHub</LinkButton>
-          <LinkButton href={profile.cv} variant="secondary"><Download size={18} /> Download CV</LinkButton>
+          <LinkButton href={assetPath(profile.cv)} variant="secondary"><Download size={18} /> Download CV</LinkButton>
           <LinkButton href={`mailto:${profile.email}`} variant="ghost"><Mail size={18} /> Contact</LinkButton>
         </div>
         <div className="contact-strip">
@@ -53,7 +58,7 @@ function Hero() {
         </div>
       </div>
       <div className="portrait-wrap">
-        <img src={profile.photo} alt="Mohamed Hekal portrait" />
+        <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
         <div className="portrait-card">
           <BrainCircuit size={22} />
           <div>
@@ -83,7 +88,7 @@ function ProjectCard({ project, index }) {
   return (
     <article className={`project-card ${index < 2 ? "featured" : ""}`}>
       <div className="project-image">
-        <img src={project.image} alt={`${project.title} screenshot`} loading="lazy" />
+        <img src={assetPath(project.image)} alt={`${project.title} screenshot`} loading="lazy" />
         <span>{project.type}</span>
       </div>
       <div className="project-body">

@@ -5,8 +5,8 @@ export const profile = {
   email: "mhekal.de@gmail.com",
   phone: "017661881119",
   github: "https://github.com/MoHekal",
-  cv: "/assets/Mohamed_Hekal_CV.pdf",
-  photo: "/assets/mohamed-hekal.jpg",
+  cv: "assets/Mohamed_Hekal_CV.pdf",
+  photo: "assets/mohamed-hekal.jpg",
   intro:
     "I build AI-powered business applications, RAG systems, workflow automation platforms, and full-stack SaaS products that turn messy operations into usable software.",
   summary:
@@ -88,7 +88,7 @@ export const projects = [
   {
     title: "NationStage Platform",
     type: "Private-source live platform",
-    image: "/screenshots/nationstage.png",
+    image: "screenshots/nationstage.png",
     live: "https://nationstage.net",
     source: null,
     tags: ["Full Stack", "Content Platform", "Responsive UI", "Business Operations"],
@@ -104,7 +104,7 @@ export const projects = [
   {
     title: "CafeSystem",
     type: "Private-source live SaaS",
-    image: "/screenshots/cafesystem.png",
+    image: "screenshots/cafesystem.png",
     live: "https://cafesystem.mprotocol26.workers.dev/#pricing",
     source: null,
     tags: ["SaaS", "QR Ordering", "Cloudflare Workers", "Payments", "AI Concierge"],
@@ -120,7 +120,7 @@ export const projects = [
   {
     title: "DocAssistant",
     type: "Open-source portfolio project",
-    image: "/screenshots/docassistant.png",
+    image: "screenshots/docassistant.png",
     live: null,
     source: "https://github.com/MoHekal/docassistant",
     tags: ["Next.js", "FastAPI", "RAG", "Qdrant", "OpenAI", "Docker"],
@@ -136,7 +136,7 @@ export const projects = [
   {
     title: "SupportAI",
     type: "Open-source portfolio project",
-    image: "/screenshots/supportai.png",
+    image: "screenshots/supportai.png",
     live: null,
     source: "https://github.com/MoHekal/supportai",
     tags: ["Next.js", "FastAPI", "RAG", "Tickets", "Analytics", "Stripe"],
@@ -152,7 +152,7 @@ export const projects = [
   {
     title: "AI Architecture Diagram Generator",
     type: "Open-source portfolio project",
-    image: "/screenshots/diagram-generator.png",
+    image: "screenshots/diagram-generator.png",
     live: null,
     source: "https://github.com/MoHekal/ai-architecture-diagram-generator",
     tags: ["React", "FastAPI", "Vision AI", "Mermaid", "BPMN", "PlantUML"],
@@ -168,7 +168,7 @@ export const projects = [
   {
     title: "AI Workflow Automation Builder",
     type: "Open-source portfolio project",
-    image: "/screenshots/workflow-builder.png",
+    image: "screenshots/workflow-builder.png",
     live: null,
     source: "https://github.com/MoHekal/ai-workflow-automation-builder",
     tags: ["React Flow", "FastAPI", "Celery", "Automation", "Workflow Engine"],
@@ -184,7 +184,7 @@ export const projects = [
   {
     title: "NutriAI",
     type: "Open-source mobile project",
-    image: "/screenshots/nutriai.png",
+    image: "screenshots/nutriai.png",
     live: null,
     source: "https://github.com/MoHekal/nutriai",
     tags: ["Flutter", "Supabase", "AI Coaching", "Nutrition", "Mobile"],
@@ -200,7 +200,7 @@ export const projects = [
   {
     title: "Qwen3-Coder Studio",
     type: "Open-source portfolio project",
-    image: "/screenshots/qwen-studio.png",
+    image: "screenshots/qwen-studio.png",
     live: null,
     source: "https://github.com/MoHekal/qwen3-coder-studio",
     tags: ["Node.js", "Electron", "Hugging Face", "Qwen", "Developer Tools"],
