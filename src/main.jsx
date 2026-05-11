@@ -1,16 +1,20 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import {
-  ArrowUpRight,
   BrainCircuit,
   CheckCircle2,
   Download,
+  ExternalLink,
   Github,
+  Globe2,
+  Layers3,
   Mail,
   MapPin,
   Phone,
+  Rocket,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  TerminalSquare
 } from "lucide-react";
 import { education, experience, profile, projects, skills, stats, verification } from "./data";
 import "./styles.css";
@@ -39,10 +43,12 @@ function SectionHeading({ eyebrow, title, children }) {
 }
 
 function Hero() {
+  const heroProjects = projects.slice(0, 3);
+
   return (
     <section className="hero" id="top">
       <div className="hero-copy">
-        <div className="status-pill"><Sparkles size={16} /> Available for AI product and full-stack engineering</div>
+        <div className="status-pill"><Sparkles size={16} /> AI product engineering portfolio</div>
         <h1>{profile.name}</h1>
         <p className="role">{profile.role}</p>
         <p className="intro">{profile.intro}</p>
@@ -57,14 +63,24 @@ function Hero() {
           <span><Phone size={16} /> {profile.phone}</span>
         </div>
       </div>
-      <div className="portrait-wrap">
-        <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
-        <div className="portrait-card">
-          <BrainCircuit size={22} />
-          <div>
-            <strong>AI systems with product sense</strong>
-            <span>RAG, automation, SaaS, dashboards, and mobile apps.</span>
+      <div className="hero-visual">
+        <div className="portrait-wrap">
+          <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
+          <div className="portrait-card">
+            <BrainCircuit size={22} />
+            <div>
+              <strong>AI systems with product sense</strong>
+              <span>RAG, automation, SaaS, dashboards, and mobile apps.</span>
+            </div>
           </div>
+        </div>
+        <div className="hero-proof">
+          {heroProjects.map((project) => (
+            <a href={project.live || project.source} target="_blank" rel="noreferrer" key={project.title}>
+              <img src={assetPath(project.image)} alt={`${project.title} preview`} />
+              <span>{project.title}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -73,29 +89,41 @@ function Hero() {
 
 function Stats() {
   return (
-    <section className="stats-grid" aria-label="Portfolio statistics">
-      {stats.map(([value, label]) => (
-        <div className="stat" key={label}>
-          <strong>{value}</strong>
-          <span>{label}</span>
-        </div>
-      ))}
+    <section className="proof-section" aria-label="Portfolio statistics">
+      <div className="stats-grid">
+        {stats.map(([value, label]) => (
+          <div className="stat" key={label}>
+            <strong>{value}</strong>
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="impact-grid">
+        <div><Rocket size={22} /><strong>Product delivery</strong><span>From idea and architecture to deployed UI, APIs, and automation.</span></div>
+        <div><Layers3 size={22} /><strong>Full-stack depth</strong><span>React, Next.js, Flutter, FastAPI, SQL, Docker, and cloud-ready workflows.</span></div>
+        <div><TerminalSquare size={22} /><strong>Engineering proof</strong><span>Build checks, screenshots, GitHub repos, and live private-source showcases.</span></div>
+      </div>
     </section>
   );
 }
 
 function ProjectCard({ project, index }) {
+  const isFeatured = index < 2;
+
   return (
-    <article className={`project-card ${index < 2 ? "featured" : ""}`}>
+    <article className={`project-card ${isFeatured ? "featured" : ""}`}>
       <div className="project-image">
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} loading="lazy" />
-        <span>{project.type}</span>
+        <span>{String(index + 1).padStart(2, "0")} / {project.type}</span>
       </div>
       <div className="project-body">
         <div className="project-title-row">
-          <h3>{project.title}</h3>
+          <div>
+            <p className="project-kicker">{project.tags.slice(0, 3).join(" / ")}</p>
+            <h3>{project.title}</h3>
+          </div>
           <div className="project-links">
-            {project.live ? <a href={project.live} target="_blank" rel="noreferrer" aria-label={`${project.title} live site`}><ArrowUpRight size={18} /></a> : null}
+            {project.live ? <a href={project.live} target="_blank" rel="noreferrer" aria-label={`${project.title} live site`}><ExternalLink size={18} /></a> : null}
             {project.source ? <a href={project.source} target="_blank" rel="noreferrer" aria-label={`${project.title} source`}><Github size={18} /></a> : null}
           </div>
         </div>
@@ -128,6 +156,11 @@ function Projects() {
       <SectionHeading eyebrow="Selected work" title="AI products, SaaS platforms, and automation systems">
         Private-source commercial work is shown with screenshots only. Open-source portfolio projects link to GitHub.
       </SectionHeading>
+      <div className="project-feature-strip">
+        <div><Globe2 size={21} /><span>Live platforms</span><strong>NationStage + CafeSystem</strong></div>
+        <div><Github size={21} /><span>Public code</span><strong>6 polished GitHub repos</strong></div>
+        <div><CheckCircle2 size={21} /><span>Evidence</span><strong>Build checks + screenshots</strong></div>
+      </div>
       <div className="projects-grid">
         {projects.map((project, index) => <ProjectCard project={project} index={index} key={project.title} />)}
       </div>
