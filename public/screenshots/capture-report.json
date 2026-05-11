@@ -1,0 +1,80 @@
+[
+  {
+    "name": "NutriAI web build",
+    "status": "ready",
+    "url": "http://127.0.0.1:4180"
+  },
+  {
+    "name": "Workflow Builder",
+    "status": "ready",
+    "url": "http://127.0.0.1:5174"
+  },
+  {
+    "name": "Diagram Generator",
+    "status": "ready",
+    "url": "http://127.0.0.1:5175"
+  },
+  {
+    "name": "DocAssistant",
+    "status": "ready",
+    "url": "http://127.0.0.1:3004"
+  },
+  {
+    "name": "Qwen3-Coder Studio",
+    "status": "ready",
+    "url": "http://127.0.0.1:3001"
+  },
+  {
+    "name": "SupportAI",
+    "status": "ready",
+    "url": "http://127.0.0.1:3003"
+  },
+  {
+    "name": "NationStage",
+    "status": "captured",
+    "file": "nationstage.png",
+    "url": "https://nationstage.net"
+  },
+  {
+    "name": "CafeSystem",
+    "status": "captured",
+    "file": "cafesystem.png",
+    "url": "https://cafesystem.mprotocol26.workers.dev/#pricing"
+  },
+  {
+    "name": "Qwen3-Coder Studio",
+    "status": "captured",
+    "file": "qwen-studio.png",
+    "url": "http://127.0.0.1:3001"
+  },
+  {
+    "name": "Workflow Builder",
+    "status": "captured",
+    "file": "workflow-builder.png",
+    "url": "http://127.0.0.1:5174"
+  },
+  {
+    "name": "Diagram Generator",
+    "status": "captured",
+    "file": "diagram-generator.png",
+    "url": "http://127.0.0.1:5175"
+  },
+  {
+    "name": "SupportAI",
+    "status": "captured",
+    "file": "supportai.png",
+    "url": "http://127.0.0.1:3003"
+  },
+  {
+    "name": "DocAssistant",
+    "status": "captured",
+    "file": "docassistant.png",
+    "url": "http://127.0.0.1:3004"
+  },
+  {
+    "name": "NutriAI",
+    "status": "captured",
+    "file": "nutriai.png",
+    "url": "http://127.0.0.1:4180"
+  }
+]
