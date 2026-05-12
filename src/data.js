@@ -14,8 +14,8 @@ export const profile = {
 };
 
 export const stats = [
-  ["8+", "AI and full-stack projects"],
-  ["4", "Production-style SaaS domains"],
+  ["AI", "Product engineering focus"],
+  ["SaaS", "Production-style business domains"],
   ["3", "Languages: English, German, Arabic"],
   ["2021", "Professional software work since"]
 ];

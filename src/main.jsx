@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   BrainCircuit,
@@ -57,9 +57,58 @@ function usePortfolioMotion() {
       { rootMargin: "0px 0px -10% 0px", threshold: 0.14 }
     );
 
+    const observeItems = () => {
+      document.querySelectorAll(".reveal:not(.is-visible), .stagger > *:not(.is-visible)").forEach((item) => observer.observe(item));
+    };
+
     animatedItems.forEach((item) => observer.observe(item));
-    return () => observer.disconnect();
+    const mutations = new MutationObserver(observeItems);
+    mutations.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      mutations.disconnect();
+    };
   }, []);
+}
+
+function useScrollState() {
+  const [progress, setProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState("projects");
+
+  useEffect(() => {
+    const sectionIds = ["projects", "skills", "verification", "experience", "about"];
+    let frame = 0;
+
+    const update = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0);
+
+      const current = sectionIds.find((id) => {
+        const section = document.getElementById(id);
+        if (!section) return false;
+        const rect = section.getBoundingClientRect();
+        return rect.top <= 150 && rect.bottom >= 150;
+      });
+
+      if (current) setActiveSection(current);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return { progress, activeSection };
 }
 
 function Hero() {
@@ -93,7 +142,7 @@ function Hero() {
         <div className="command-card motion-card">
           <div className="command-topline">
             <span>Selected systems</span>
-            <strong>08 projects</strong>
+            <strong>Systems board</strong>
           </div>
           <div className="portrait-wrap">
             <img src={assetPath(profile.photo)} alt="Mohamed Hekal portrait" />
@@ -103,6 +152,12 @@ function Hero() {
                 <strong>AI systems with product sense</strong>
                 <span>RAG, automation, SaaS, dashboards, and mobile apps.</span>
               </div>
+            </div>
+            <div className="signal-board" aria-hidden="true">
+              <span>API</span>
+              <span>RAG</span>
+              <span>UI</span>
+              <span>Deploy</span>
             </div>
           </div>
           <div className="command-metrics">
@@ -153,14 +208,12 @@ function Stats() {
   );
 }
 
-function ProjectCard({ project, index, compact = false }) {
-  const isFeatured = index < 2;
-
+function ProjectCard({ project, compact = false }) {
   return (
-    <article className={`project-card motion-card ${isFeatured && !compact ? "featured" : ""} ${compact ? "compact" : ""}`}>
+    <article className={`project-card motion-card ${compact ? "compact" : ""}`}>
       <div className="project-image">
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} loading="lazy" />
-        <span>{String(index + 1).padStart(2, "0")} / {project.type}</span>
+        <span>{project.type}</span>
       </div>
       <div className="project-body">
         <div className="project-title-row">
@@ -196,15 +249,25 @@ function ProjectCard({ project, index, compact = false }) {
   );
 }
 
-function WorkIndex() {
+function WorkIndex({ activeMode, onModeChange }) {
+  const modes = [
+    { id: "showcase", label: "Private showcases", icon: Globe2 },
+    { id: "github", label: "GitHub repos", icon: Github },
+    { id: "proof", label: "Validation proof", icon: CheckCircle2 }
+  ];
+
   return (
     <aside className="work-index reveal" aria-label="Work organization">
       <div className="work-index-card">
         <span className="index-label">Portfolio map</span>
-        <h3>Organized by proof, not just thumbnails.</h3>
-        <a href="#live-work"><Globe2 size={17} /> Live private-source products</a>
-        <a href="#open-source"><Github size={17} /> Open-source engineering repos</a>
-        <a href="#verification"><CheckCircle2 size={17} /> Build and screenshot validation</a>
+        <h3>Choose the evidence you want to inspect.</h3>
+        <div className="work-mode-list">
+          {modes.map(({ id, label, icon: Icon }) => (
+            <button className={activeMode === id ? "active" : ""} type="button" onClick={() => onModeChange(id)} key={id}>
+              <Icon size={17} /> {label}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="work-index-card dark">
         <span className="index-label">Best signal</span>
@@ -215,7 +278,7 @@ function WorkIndex() {
   );
 }
 
-function FeaturedCaseStudy({ project, index }) {
+function FeaturedCaseStudy({ project }) {
   return (
     <article className="case-study motion-card reveal">
       <div className="case-visual">
@@ -223,7 +286,6 @@ function FeaturedCaseStudy({ project, index }) {
       </div>
       <div className="case-content">
         <div className="case-meta">
-          <span>{String(index + 1).padStart(2, "0")}</span>
           <span>{project.type}</span>
         </div>
         <h3>{project.title}</h3>
@@ -255,9 +317,33 @@ function FeaturedCaseStudy({ project, index }) {
   );
 }
 
+function WorkProofPanel({ items }) {
+  return (
+    <div className="proof-board mode-pane">
+      {items.map((project) => (
+        <article className="proof-card motion-card" key={project.title}>
+          <div>
+            <span>{project.source ? "Public repository" : "Private showcase"}</span>
+            <h3>{project.title}</h3>
+          </div>
+          <ul className="checks">
+            {project.tests.map((item) => <li key={item}><CheckCircle2 size={15} /> {item}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 function Projects() {
+  const [activeMode, setActiveMode] = useState("showcase");
   const liveProjects = projects.filter((project) => project.live || project.privateShowcase);
   const sourceProjects = projects.filter((project) => project.source);
+  const modeCopy = {
+    showcase: "Private-source work stays screenshot-only, with outcomes and boundaries made clear.",
+    github: "Public repositories are grouped as engineering evidence with screenshots, docs, and validation notes.",
+    proof: "Validation cards show how each project was checked before being presented in the portfolio."
+  };
 
   return (
     <section id="projects">
@@ -266,38 +352,63 @@ function Projects() {
       </SectionHeading>
       <div className="project-feature-strip stagger">
         <div><Globe2 size={21} /><span>Live platforms</span><strong>NationStage + CafeSystem</strong></div>
-        <div><Github size={21} /><span>Public code</span><strong>6 polished GitHub repos</strong></div>
+        <div><Github size={21} /><span>Public code</span><strong>Polished GitHub repositories</strong></div>
         <div><CheckCircle2 size={21} /><span>Evidence</span><strong>Build checks + screenshots</strong></div>
       </div>
+      <div className="workbench">
+        <div className="workbench-top reveal">
+          <div>
+            <span>Interactive workbench</span>
+            <h3>{activeMode === "showcase" ? "Private-source product showcases" : activeMode === "github" ? "Public engineering portfolio" : "Build and screenshot validation"}</h3>
+            <p>{modeCopy[activeMode]}</p>
+          </div>
+          <div className="workbench-status">
+            <span />
+            Active view
+          </div>
+        </div>
+      </div>
       <div className="work-layout">
-        <WorkIndex />
+        <WorkIndex activeMode={activeMode} onModeChange={setActiveMode} />
         <div className="work-content">
-          <div id="live-work" className="work-cluster">
+          {activeMode === "showcase" ? <div id="live-work" className="work-cluster mode-pane" key="showcase">
             <div className="cluster-heading reveal">
-              <span>01</span>
+              <span><Globe2 size={20} /></span>
               <div>
-                <h3>Live private-source platforms</h3>
+                <h3>Private-source platforms</h3>
                 <p>Source code stays private. The portfolio shows screenshots, product outcomes, and validation boundaries.</p>
               </div>
             </div>
-            {liveProjects.map((project, index) => (
-              <FeaturedCaseStudy project={project} index={index} key={project.title} />
+            {liveProjects.map((project) => (
+              <FeaturedCaseStudy project={project} key={project.title} />
             ))}
-          </div>
-          <div id="open-source" className="work-cluster">
+          </div> : null}
+
+          {activeMode === "github" ? <div id="open-source" className="work-cluster mode-pane" key="github">
             <div className="cluster-heading reveal">
-              <span>02</span>
+              <span><Github size={20} /></span>
               <div>
                 <h3>Open-source engineering portfolio</h3>
                 <p>Public GitHub repos with cleaned READMEs, source links, screenshots, and build evidence.</p>
               </div>
             </div>
             <div className="projects-grid stagger">
-              {sourceProjects.map((project, index) => (
-                <ProjectCard project={project} index={index + liveProjects.length} compact key={project.title} />
+              {sourceProjects.map((project) => (
+                <ProjectCard project={project} compact key={project.title} />
               ))}
             </div>
-          </div>
+          </div> : null}
+
+          {activeMode === "proof" ? <div id="work-proof" className="work-cluster mode-pane" key="proof">
+            <div className="cluster-heading reveal">
+              <span><CheckCircle2 size={20} /></span>
+              <div>
+                <h3>Validation proof</h3>
+                <p>Build checks, screenshot captures, smoke tests, and source review signals grouped by project.</p>
+              </div>
+            </div>
+            <WorkProofPanel items={[...liveProjects, ...sourceProjects]} />
+          </div> : null}
         </div>
       </div>
     </section>
@@ -394,16 +505,24 @@ function About() {
 
 function App() {
   usePortfolioMotion();
+  const { progress, activeSection } = useScrollState();
+  const navItems = [
+    ["projects", "Work"],
+    ["skills", "Skills"],
+    ["verification", "Proof"],
+    ["experience", "Experience"],
+    ["about", "About"]
+  ];
 
   return (
     <>
+      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
       <header className="site-header">
         <a href="#top" className="brand">MH</a>
         <nav>
-          <a href="#projects">Work</a>
-          <a href="#skills">Skills</a>
-          <a href="#experience">Experience</a>
-          <a href="#about">About</a>
+          {navItems.map(([id, label]) => (
+            <a className={activeSection === id ? "active" : ""} href={`#${id}`} key={id}>{label}</a>
+          ))}
         </nav>
         <a href={profile.github} target="_blank" rel="noreferrer"><Github size={19} /> GitHub</a>
       </header>
