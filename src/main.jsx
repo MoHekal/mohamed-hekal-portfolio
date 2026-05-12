@@ -118,7 +118,7 @@ function Hero() {
     <section className="hero" id="top">
       <div className="hero-copy motion-card">
         <div className="status-pill"><Sparkles size={16} /> AI product engineering portfolio</div>
-        <h1>{profile.name}</h1>
+        <h1><span>Mohamed</span><span>Hekal</span></h1>
         <p className="role">{profile.role}</p>
         <p className="intro">{profile.intro}</p>
         <div className="hero-specialties" aria-label="Core specialties">

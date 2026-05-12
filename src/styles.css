@@ -204,8 +204,9 @@ p {
   gap: 24px;
   align-items: center;
   padding: 12px clamp(18px, 4vw, 54px);
-  background: rgba(247, 248, 251, 0.88);
+  background: rgba(247, 248, 251, 0.98);
   border-bottom: 1px solid rgba(217, 225, 232, 0.86);
+  box-shadow: 0 12px 34px rgba(26, 37, 55, 0.06);
   backdrop-filter: blur(18px);
 }
 
@@ -338,10 +339,14 @@ main {
 
 .hero h1 {
   margin: 26px 0 0;
-  max-width: 740px;
-  font-size: clamp(4.1rem, 8.7vw, 8.1rem);
-  line-height: 0.86;
+  max-width: 100%;
+  font-size: clamp(3.8rem, 7.2vw, 6.9rem);
+  line-height: 0.92;
   letter-spacing: 0;
+}
+
+.hero h1 span {
+  display: block;
 }
 
 .role {
@@ -430,7 +435,6 @@ main {
 }
 
 .contact-strip span,
-.checks li,
 .principles div {
   display: inline-flex;
   align-items: center;
@@ -859,15 +863,15 @@ section {
 
 .work-layout {
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 18px;
   align-items: start;
 }
 
 .work-index {
-  position: sticky;
-  top: 94px;
+  position: static;
   display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
   gap: 14px;
 }
 
@@ -927,31 +931,45 @@ section {
 
 .work-mode-list {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .work-mode-list button {
-  border-right: 0;
-  border-bottom: 0;
-  border-left: 0;
-  border-radius: 0;
-  background: transparent;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.7);
   font: inherit;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
-  transition: color 160ms ease, transform 160ms ease;
+  transition: color 160ms ease, transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 
 .work-mode-list button:hover,
 .work-mode-list button.active,
 .work-index-card a:hover {
   color: var(--red);
-  transform: translateX(3px);
+  transform: translateY(-2px);
+}
+
+.work-mode-list button.active {
+  color: white;
+  background: var(--night);
+  border-color: var(--night);
+  box-shadow: 0 14px 28px rgba(8, 11, 18, 0.12);
 }
 
 .work-mode-list button.active svg,
 .work-index-card a svg,
 .work-mode-list button svg {
   color: var(--teal);
+}
+
+.work-mode-list button.active svg {
+  color: var(--mint);
 }
 
 .work-index-card.dark strong,
@@ -1024,7 +1042,7 @@ section {
 
 .case-study {
   display: grid;
-  grid-template-columns: minmax(0, 1.06fr) minmax(360px, 0.94fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.72fr);
   gap: 0;
   overflow: hidden;
   border-radius: var(--radius);
@@ -1039,7 +1057,7 @@ section {
 }
 
 .case-visual {
-  min-height: 480px;
+  min-height: 360px;
   background: #05070d;
 }
 
@@ -1076,8 +1094,8 @@ section {
 
 .case-content h3 {
   margin: 0;
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
-  line-height: 0.98;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.02;
 }
 
 .case-content > p {
@@ -1122,8 +1140,8 @@ section {
 
 .case-columns {
   display: grid;
-  grid-template-columns: 1fr 0.82fr;
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 18px;
   margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.13);
@@ -1382,7 +1400,15 @@ li {
 }
 
 .checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
   color: #1f3f38;
+}
+
+.checks li svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
 }
 
 .project-card.featured .checks li {
@@ -1661,6 +1687,7 @@ footer strong {
 
 @media (max-width: 700px) {
   .site-header {
+    position: static;
     grid-template-columns: auto auto;
     gap: 10px;
     padding: 12px;
