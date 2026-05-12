@@ -108,12 +108,6 @@ async function main() {
 
   const captures = [
     { name: "NationStage", url: "https://nationstage.net", file: "nationstage.png" },
-    {
-      name: "CafeSystem",
-      url: "https://cafesystem.mprotocol26.workers.dev/#pricing",
-      file: "cafesystem.png",
-      afterGoto: async (page) => page.locator("#pricing").scrollIntoViewIfNeeded().catch(() => null)
-    },
     { name: "Qwen3-Coder Studio", url: "http://127.0.0.1:3001", file: "qwen-studio.png" },
     { name: "Workflow Builder", url: "http://127.0.0.1:5174", file: "workflow-builder.png" },
     { name: "Diagram Generator", url: "http://127.0.0.1:5175", file: "diagram-generator.png" },

@@ -39,7 +39,7 @@
     "name": "CafeSystem",
     "status": "captured",
     "file": "cafesystem.png",
-    "url": "https://cafesystem.mprotocol26.workers.dev/#pricing"
+    "visibility": "screenshot-only private-source showcase"
   },
   {
     "name": "Qwen3-Coder Studio",

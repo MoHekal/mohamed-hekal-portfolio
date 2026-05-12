@@ -103,9 +103,10 @@ export const projects = [
   },
   {
     title: "CafeSystem",
-    type: "Private-source live SaaS",
+    type: "Private-source SaaS showcase",
     image: "screenshots/cafesystem.png",
-    live: "https://cafesystem.mprotocol26.workers.dev/#pricing",
+    live: null,
+    privateShowcase: true,
     source: null,
     tags: ["SaaS", "QR Ordering", "Cloudflare Workers", "Payments", "AI Concierge"],
     summary:
@@ -115,7 +116,7 @@ export const projects = [
       "Designed for independent cafes with ordering, kitchen, loyalty, analytics, and multilingual flows.",
       "Source code is private; public portfolio includes screenshots only."
     ],
-    tests: ["Live pricing route smoke test", "Desktop screenshot capture", "Anchor navigation check"]
+    tests: ["Private screenshot review", "Desktop screenshot capture", "Anchor navigation check"]
   },
   {
     title: "DocAssistant",

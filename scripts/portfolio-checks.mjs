@@ -17,7 +17,7 @@ if (missing.length) {
 }
 
 const source = readFileSync(path.join(root, "src", "data.js"), "utf8");
-for (const phrase of ["MoHekal", "nationstage.net", "cafesystem.mprotocol26.workers.dev"]) {
+for (const phrase of ["MoHekal", "nationstage.net", "CafeSystem"]) {
   if (!source.includes(phrase)) {
     console.error(`Missing portfolio reference: ${phrase}`);
     process.exit(1);

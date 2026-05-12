@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import {
   BrainCircuit,
@@ -34,7 +34,7 @@ function LinkButton({ href, children, variant = "primary" }) {
 
 function SectionHeading({ eyebrow, title, children }) {
   return (
-    <div className="section-heading">
+    <div className="section-heading reveal">
       <span>{eyebrow}</span>
       <h2>{title}</h2>
       {children ? <p>{children}</p> : null}
@@ -42,12 +42,32 @@ function SectionHeading({ eyebrow, title, children }) {
   );
 }
 
+function usePortfolioMotion() {
+  useEffect(() => {
+    const animatedItems = document.querySelectorAll(".reveal, .stagger > *");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.14 }
+    );
+
+    animatedItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+}
+
 function Hero() {
   const heroProjects = projects.slice(0, 3);
 
   return (
     <section className="hero" id="top">
-      <div className="hero-copy">
+      <div className="hero-copy motion-card">
         <div className="status-pill"><Sparkles size={16} /> AI product engineering portfolio</div>
         <h1>{profile.name}</h1>
         <p className="role">{profile.role}</p>
@@ -69,8 +89,8 @@ function Hero() {
           <span><Phone size={16} /> {profile.phone}</span>
         </div>
       </div>
-      <div className="hero-visual">
-        <div className="command-card">
+      <div className="hero-visual reveal">
+        <div className="command-card motion-card">
           <div className="command-topline">
             <span>Selected systems</span>
             <strong>08 projects</strong>
@@ -91,13 +111,22 @@ function Hero() {
             <div><strong>LLMs</strong><span>AI workflows</span></div>
           </div>
         </div>
-        <div className="hero-proof">
-          {heroProjects.map((project) => (
-            <a href={project.live || project.source} target="_blank" rel="noreferrer" key={project.title}>
-              <img src={assetPath(project.image)} alt={`${project.title} preview`} />
-              <span>{project.title}</span>
-            </a>
-          ))}
+        <div className="hero-proof stagger">
+          {heroProjects.map((project) => {
+            const href = project.live || project.source;
+            const content = (
+              <>
+                <img src={assetPath(project.image)} alt={`${project.title} preview`} />
+                <span>{project.title}</span>
+              </>
+            );
+
+            return href ? (
+              <a href={href} target="_blank" rel="noreferrer" key={project.title}>{content}</a>
+            ) : (
+              <div className="proof-tile locked" key={project.title}>{content}</div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -107,7 +136,7 @@ function Hero() {
 function Stats() {
   return (
     <section className="proof-section" aria-label="Portfolio statistics">
-      <div className="stats-grid">
+      <div className="stats-grid stagger">
         {stats.map(([value, label]) => (
           <div className="stat" key={label}>
             <strong>{value}</strong>
@@ -115,7 +144,7 @@ function Stats() {
           </div>
         ))}
       </div>
-      <div className="impact-grid">
+      <div className="impact-grid stagger">
         <div><Rocket size={22} /><strong>Product delivery</strong><span>From idea and architecture to deployed UI, APIs, and automation.</span></div>
         <div><Layers3 size={22} /><strong>Full-stack depth</strong><span>React, Next.js, Flutter, FastAPI, SQL, Docker, and cloud-ready workflows.</span></div>
         <div><TerminalSquare size={22} /><strong>Engineering proof</strong><span>Build checks, screenshots, GitHub repos, and live private-source showcases.</span></div>
@@ -128,7 +157,7 @@ function ProjectCard({ project, index, compact = false }) {
   const isFeatured = index < 2;
 
   return (
-    <article className={`project-card ${isFeatured && !compact ? "featured" : ""} ${compact ? "compact" : ""}`}>
+    <article className={`project-card motion-card ${isFeatured && !compact ? "featured" : ""} ${compact ? "compact" : ""}`}>
       <div className="project-image">
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} loading="lazy" />
         <span>{String(index + 1).padStart(2, "0")} / {project.type}</span>
@@ -169,7 +198,7 @@ function ProjectCard({ project, index, compact = false }) {
 
 function WorkIndex() {
   return (
-    <aside className="work-index" aria-label="Work organization">
+    <aside className="work-index reveal" aria-label="Work organization">
       <div className="work-index-card">
         <span className="index-label">Portfolio map</span>
         <h3>Organized by proof, not just thumbnails.</h3>
@@ -188,7 +217,7 @@ function WorkIndex() {
 
 function FeaturedCaseStudy({ project, index }) {
   return (
-    <article className="case-study">
+    <article className="case-study motion-card reveal">
       <div className="case-visual">
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} />
       </div>
@@ -202,6 +231,7 @@ function FeaturedCaseStudy({ project, index }) {
         <div className="case-actions">
           {project.live ? <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={17} /> Live site</a> : null}
           {project.source ? <a href={project.source} target="_blank" rel="noreferrer"><Github size={17} /> Source</a> : null}
+          {!project.live && !project.source ? <span>Screenshot-only showcase</span> : null}
         </div>
         <div className="case-columns">
           <div>
@@ -226,7 +256,7 @@ function FeaturedCaseStudy({ project, index }) {
 }
 
 function Projects() {
-  const liveProjects = projects.filter((project) => project.live);
+  const liveProjects = projects.filter((project) => project.live || project.privateShowcase);
   const sourceProjects = projects.filter((project) => project.source);
 
   return (
@@ -234,7 +264,7 @@ function Projects() {
       <SectionHeading eyebrow="Selected work" title="AI products, SaaS platforms, and automation systems">
         Private-source commercial work is shown with screenshots only. Open-source portfolio projects link to GitHub.
       </SectionHeading>
-      <div className="project-feature-strip">
+      <div className="project-feature-strip stagger">
         <div><Globe2 size={21} /><span>Live platforms</span><strong>NationStage + CafeSystem</strong></div>
         <div><Github size={21} /><span>Public code</span><strong>6 polished GitHub repos</strong></div>
         <div><CheckCircle2 size={21} /><span>Evidence</span><strong>Build checks + screenshots</strong></div>
@@ -243,7 +273,7 @@ function Projects() {
         <WorkIndex />
         <div className="work-content">
           <div id="live-work" className="work-cluster">
-            <div className="cluster-heading">
+            <div className="cluster-heading reveal">
               <span>01</span>
               <div>
                 <h3>Live private-source platforms</h3>
@@ -255,14 +285,14 @@ function Projects() {
             ))}
           </div>
           <div id="open-source" className="work-cluster">
-            <div className="cluster-heading">
+            <div className="cluster-heading reveal">
               <span>02</span>
               <div>
                 <h3>Open-source engineering portfolio</h3>
                 <p>Public GitHub repos with cleaned READMEs, source links, screenshots, and build evidence.</p>
               </div>
             </div>
-            <div className="projects-grid">
+            <div className="projects-grid stagger">
               {sourceProjects.map((project, index) => (
                 <ProjectCard project={project} index={index + liveProjects.length} compact key={project.title} />
               ))}
@@ -280,9 +310,9 @@ function Skills() {
       <SectionHeading eyebrow="Capabilities" title="The stack behind the work">
         I focus on AI systems that still feel like good software: reliable APIs, clear user flows, maintainable architecture, and measurable business value.
       </SectionHeading>
-      <div className="skills-grid">
+      <div className="skills-grid stagger">
         {skills.map((group) => (
-          <div className="skill-card" key={group.title}>
+          <div className="skill-card motion-card" key={group.title}>
             <h3>{group.title}</h3>
             <div>
               {group.items.map((item) => <span key={item}>{item}</span>)}
@@ -298,9 +328,9 @@ function Experience() {
   return (
     <section id="experience">
       <SectionHeading eyebrow="Experience" title="Engineering across AI, data, and business systems" />
-      <div className="timeline">
+      <div className="timeline stagger">
         {experience.map((job) => (
-          <article className="timeline-card" key={`${job.company}-${job.period}`}>
+          <article className="timeline-card motion-card" key={`${job.company}-${job.period}`}>
             <div>
               <span>{job.period}</span>
               <h3>{job.role}</h3>
@@ -322,7 +352,7 @@ function Verification() {
       <SectionHeading eyebrow="Validation" title="Build and screenshot test cases">
         Each featured project has at least one portfolio-safe verification signal: a production build, syntax check, live route smoke test, or captured screenshot.
       </SectionHeading>
-      <div className="verification-table">
+      <div className="verification-table stagger">
         {verification.map((item) => (
           <article key={item.project}>
             <div>
@@ -363,6 +393,8 @@ function About() {
 }
 
 function App() {
+  usePortfolioMotion();
+
   return (
     <>
       <header className="site-header">
