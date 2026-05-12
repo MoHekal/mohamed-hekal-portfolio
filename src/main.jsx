@@ -285,32 +285,36 @@ function FeaturedCaseStudy({ project }) {
         <img src={assetPath(project.image)} alt={`${project.title} screenshot`} />
       </div>
       <div className="case-content">
-        <div className="case-meta">
-          <span>{project.type}</span>
-        </div>
-        <h3>{project.title}</h3>
-        <p>{project.summary}</p>
-        <div className="case-actions">
-          {project.live ? <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={17} /> Live site</a> : null}
-          {project.source ? <a href={project.source} target="_blank" rel="noreferrer"><Github size={17} /> Source</a> : null}
-          {!project.live && !project.source ? <span>Screenshot-only showcase</span> : null}
-        </div>
-        <div className="case-columns">
-          <div>
-            <h4>Role and build</h4>
-            <ul>
-              {project.highlights.map((item) => <li key={item}>{item}</li>)}
-            </ul>
+        <div className="case-summary">
+          <div className="case-meta">
+            <span>{project.type}</span>
           </div>
-          <div>
-            <h4>Evidence</h4>
-            <ul className="checks">
-              {project.tests.map((item) => <li key={item}><CheckCircle2 size={15} /> {item}</li>)}
-            </ul>
+          <h3>{project.title}</h3>
+          <p>{project.summary}</p>
+          <div className="case-actions">
+            {project.live ? <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={17} /> Live site</a> : null}
+            {project.source ? <a href={project.source} target="_blank" rel="noreferrer"><Github size={17} /> Source</a> : null}
+            {!project.live && !project.source ? <span>Screenshot-only showcase</span> : null}
           </div>
         </div>
-        <div className="tag-row">
-          {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+        <div className="case-info">
+          <div className="case-columns">
+            <div>
+              <h4>Role and build</h4>
+              <ul>
+                {project.highlights.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+            <div>
+              <h4>Evidence</h4>
+              <ul className="checks">
+                {project.tests.map((item) => <li key={item}><CheckCircle2 size={15} /> {item}</li>)}
+              </ul>
+            </div>
+          </div>
+          <div className="tag-row">
+            {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+          </div>
         </div>
       </div>
     </article>
