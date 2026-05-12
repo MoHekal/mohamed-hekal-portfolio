@@ -249,30 +249,27 @@ function ProjectCard({ project, compact = false }) {
   );
 }
 
-function WorkIndex({ activeMode, onModeChange }) {
-  const modes = [
-    { id: "showcase", label: "Private showcases", icon: Globe2 },
-    { id: "github", label: "GitHub repos", icon: Github },
-    { id: "proof", label: "Validation proof", icon: CheckCircle2 }
+function WorkIndex() {
+  const links = [
+    { href: "#live-work", label: "Private screenshots", note: "NationStage + CafeSystem", icon: Globe2 },
+    { href: "#open-source", label: "Public GitHub work", note: "Source + screenshots", icon: Github },
+    { href: "#verification", label: "Validation proof", note: "Build and smoke checks", icon: CheckCircle2 }
   ];
 
   return (
     <aside className="work-index reveal" aria-label="Work organization">
-      <div className="work-index-card">
+      <div className="work-index-card directory-card">
         <span className="index-label">Portfolio map</span>
-        <h3>Choose the evidence you want to inspect.</h3>
-        <div className="work-mode-list">
-          {modes.map(({ id, label, icon: Icon }) => (
-            <button className={activeMode === id ? "active" : ""} type="button" onClick={() => onModeChange(id)} key={id}>
-              <Icon size={17} /> {label}
-            </button>
+        <h3>All projects are visible below, grouped by proof type.</h3>
+        <div className="work-directory-list">
+          {links.map(({ href, label, note, icon: Icon }) => (
+            <a href={href} key={href}>
+              <Icon size={18} />
+              <strong>{label}</strong>
+              <span>{note}</span>
+            </a>
           ))}
         </div>
-      </div>
-      <div className="work-index-card dark">
-        <span className="index-label">Best signal</span>
-        <strong>Private commercial platforms + public source projects</strong>
-        <p>Commercial work is screenshot-only. Public projects show source, docs, and validation evidence.</p>
       </div>
     </aside>
   );
@@ -321,33 +318,9 @@ function FeaturedCaseStudy({ project }) {
   );
 }
 
-function WorkProofPanel({ items }) {
-  return (
-    <div className="proof-board mode-pane">
-      {items.map((project) => (
-        <article className="proof-card motion-card" key={project.title}>
-          <div>
-            <span>{project.source ? "Public repository" : "Private showcase"}</span>
-            <h3>{project.title}</h3>
-          </div>
-          <ul className="checks">
-            {project.tests.map((item) => <li key={item}><CheckCircle2 size={15} /> {item}</li>)}
-          </ul>
-        </article>
-      ))}
-    </div>
-  );
-}
-
 function Projects() {
-  const [activeMode, setActiveMode] = useState("showcase");
   const liveProjects = projects.filter((project) => project.live || project.privateShowcase);
   const sourceProjects = projects.filter((project) => project.source);
-  const modeCopy = {
-    showcase: "Private-source work stays screenshot-only, with outcomes and boundaries made clear.",
-    github: "Public repositories are grouped as engineering evidence with screenshots, docs, and validation notes.",
-    proof: "Validation cards show how each project was checked before being presented in the portfolio."
-  };
 
   return (
     <section id="projects">
@@ -362,38 +335,38 @@ function Projects() {
       <div className="workbench">
         <div className="workbench-top reveal">
           <div>
-            <span>Interactive workbench</span>
-            <h3>{activeMode === "showcase" ? "Private-source product showcases" : activeMode === "github" ? "Public engineering portfolio" : "Build and screenshot validation"}</h3>
-            <p>{modeCopy[activeMode]}</p>
+            <span>Project directory</span>
+            <h3>All featured work and screenshots</h3>
+            <p>Nothing is hidden behind tabs. Private-source products stay screenshot-only, and public repositories are shown with their screenshots and GitHub links.</p>
           </div>
           <div className="workbench-status">
             <span />
-            Active view
+            Full portfolio view
           </div>
         </div>
       </div>
       <div className="work-layout">
-        <WorkIndex activeMode={activeMode} onModeChange={setActiveMode} />
+        <WorkIndex />
         <div className="work-content">
-          {activeMode === "showcase" ? <div id="live-work" className="work-cluster mode-pane" key="showcase">
+          <div id="live-work" className="work-cluster mode-pane">
             <div className="cluster-heading reveal">
               <span><Globe2 size={20} /></span>
               <div>
-                <h3>Private-source platforms</h3>
+                <h3>Private-source screenshot case studies</h3>
                 <p>Source code stays private. The portfolio shows screenshots, product outcomes, and validation boundaries.</p>
               </div>
             </div>
             {liveProjects.map((project) => (
               <FeaturedCaseStudy project={project} key={project.title} />
             ))}
-          </div> : null}
+          </div>
 
-          {activeMode === "github" ? <div id="open-source" className="work-cluster mode-pane" key="github">
+          <div id="open-source" className="work-cluster mode-pane">
             <div className="cluster-heading reveal">
               <span><Github size={20} /></span>
               <div>
-                <h3>Open-source engineering portfolio</h3>
-                <p>Public GitHub repos with cleaned READMEs, source links, screenshots, and build evidence.</p>
+                <h3>Public GitHub projects with screenshots</h3>
+                <p>These projects are public, linked to GitHub, and shown with captured UI screenshots plus build or review evidence.</p>
               </div>
             </div>
             <div className="projects-grid stagger">
@@ -401,18 +374,7 @@ function Projects() {
                 <ProjectCard project={project} compact key={project.title} />
               ))}
             </div>
-          </div> : null}
-
-          {activeMode === "proof" ? <div id="work-proof" className="work-cluster mode-pane" key="proof">
-            <div className="cluster-heading reveal">
-              <span><CheckCircle2 size={20} /></span>
-              <div>
-                <h3>Validation proof</h3>
-                <p>Build checks, screenshot captures, smoke tests, and source review signals grouped by project.</p>
-              </div>
-            </div>
-            <WorkProofPanel items={[...liveProjects, ...sourceProjects]} />
-          </div> : null}
+          </div>
         </div>
       </div>
     </section>

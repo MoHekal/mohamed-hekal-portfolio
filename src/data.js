@@ -213,6 +213,22 @@ export const projects = [
       "Desktop mode with Electron and safe file filtering for sensitive paths."
     ],
     tests: ["Node syntax check", "Local server screenshot", "Sensitive file filtering reviewed"]
+  },
+  {
+    title: "Recipe Management System",
+    type: "Additional open-source project",
+    image: "screenshots/recipe-management.png",
+    live: null,
+    source: "https://github.com/MoHekal/Recipe-Management---SpringBoot",
+    tags: ["Java", "Spring Boot", "React", "PostgreSQL", "Docker"],
+    summary:
+      "A full-stack recipe management application with a Spring Boot API, React frontend, user flows, recipe browsing, and export-oriented backend models.",
+    highlights: [
+      "Built a Java/Spring Boot backend with controllers, services, repositories, models, and unit tests.",
+      "Created a React frontend for home, recipe browsing, recipe details, login, signup, and protected add-recipe flows.",
+      "Included Docker/PostgreSQL setup and PDF/text export support for recipe data."
+    ],
+    tests: ["React production build", "Frontend screenshot capture", "Repository structure review"]
   }
 ];
 
@@ -255,6 +271,11 @@ export const verification = [
   {
     project: "NationStage and CafeSystem",
     checks: ["Live URL smoke test", "Screenshot capture", "Private-source boundary respected"],
+    status: "Passed"
+  },
+  {
+    project: "Recipe Management System",
+    checks: ["React production build", "Frontend screenshot capture", "GitHub source link verified"],
     status: "Passed"
   }
 ];

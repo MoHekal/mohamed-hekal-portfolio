@@ -871,7 +871,7 @@ section {
 .work-index {
   position: static;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  grid-template-columns: 1fr;
   gap: 14px;
 }
 
@@ -917,76 +917,51 @@ section {
   line-height: 1.12;
 }
 
-.work-index-card a,
-.work-mode-list button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 0;
-  color: #313945;
-  border-top: 1px solid var(--line);
-  font-weight: 800;
-}
-
-.work-mode-list {
+.work-directory-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.work-mode-list button {
-  justify-content: center;
-  min-height: 46px;
-  padding: 10px 12px;
+.work-directory-list a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 10px;
+  align-items: center;
+  min-height: 74px;
+  padding: 13px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.7);
-  font: inherit;
-  text-align: center;
-  cursor: pointer;
-  transition: color 160ms ease, transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.work-mode-list button:hover,
-.work-mode-list button.active,
-.work-index-card a:hover {
-  color: var(--red);
+.work-directory-list a:hover {
   transform: translateY(-2px);
+  border-color: rgba(15, 118, 110, 0.26);
+  box-shadow: 0 14px 30px rgba(26, 37, 55, 0.08);
 }
 
-.work-mode-list button.active {
-  color: white;
-  background: var(--night);
-  border-color: var(--night);
-  box-shadow: 0 14px 28px rgba(8, 11, 18, 0.12);
-}
-
-.work-mode-list button.active svg,
-.work-index-card a svg,
-.work-mode-list button svg {
+.work-directory-list a svg {
+  grid-row: span 2;
   color: var(--teal);
 }
 
-.work-mode-list button.active svg {
-  color: var(--mint);
-}
-
-.work-index-card.dark strong,
-.work-index-card.dark p {
+.work-directory-list strong,
+.work-directory-list span {
   display: block;
 }
 
-.work-index-card.dark strong {
-  margin-top: 10px;
-  font-size: 1.18rem;
-  line-height: 1.25;
+.work-directory-list strong {
+  font-size: 0.96rem;
 }
 
-.work-index-card.dark p {
-  margin: 12px 0 0;
-  color: #c2cedb;
-  line-height: 1.5;
+.work-directory-list span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 .work-content {
@@ -1784,6 +1759,7 @@ footer strong {
   .project-feature-strip,
   .impact-grid,
   .projects-grid,
+  .work-directory-list,
   .work-index,
   .case-columns,
   .command-metrics,

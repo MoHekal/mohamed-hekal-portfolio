@@ -76,5 +76,11 @@
     "status": "captured",
     "file": "nutriai.png",
     "url": "http://127.0.0.1:4180"
+  },
+  {
+    "name": "Recipe Management System",
+    "status": "captured",
+    "file": "recipe-management.png",
+    "url": "http://127.0.0.1:4185"
   }
 ]
