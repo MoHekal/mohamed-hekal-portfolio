@@ -1792,7 +1792,9 @@ footer strong {
   }
 
   .case-visual {
-    min-height: 260px;
+    aspect-ratio: auto;
+    height: 260px;
+    min-height: 0;
   }
 
   .case-content {
